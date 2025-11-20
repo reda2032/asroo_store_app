@@ -13,7 +13,13 @@ class AsrooStoreApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home:const Scaffold(),
+
+      home: const Scaffold(
+        body: Center(
+          child: Text('Asroo Store'),
+        ),
+      ),
     );
   }
+// todo connectivity_plus
 }
