@@ -1,4 +1,7 @@
+
+import 'package:asroo_store_app/core/app/connectivity_controller.dart';
 import 'package:asroo_store_app/core/app/env.variables.dart';
+import 'package:asroo_store_app/core/common/screens/no_network_screen.dart';
 import 'package:flutter/material.dart';
 
 class AsrooStoreApp extends StatelessWidget {
@@ -7,19 +10,47 @@ class AsrooStoreApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Asroo Store',
-      debugShowCheckedModeBanner: EnvVariable.instance.debugMode,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-      ),
+    return ValueListenableBuilder(
+        valueListenable: ConnectivityController.instance.isConnected,
 
-      home: const Scaffold(
-        body: Center(
-          child: Text('Asroo Store'),
-        ),
-      ),
-    );
+        builder: (_, value, _) {
+          if (value) {
+            return MaterialApp(
+              title: 'Asroo Store',
+              debugShowCheckedModeBanner: EnvVariable.instance.debugMode,
+              theme: ThemeData(
+                colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+              ),
+              builder: (context, widget) {
+                return GestureDetector(
+                  onTap: () {
+                    FocusManager.instance.primaryFocus?.unfocus();
+                  },
+                  child: Scaffold(
+                    body: Builder(
+                      builder: (context) {
+                        ConnectivityController.instance.init();
+                        return widget!;
+                      },
+                    ),
+                  ),
+                );
+              },
+
+              home: const Scaffold(
+                body: Center(
+                  child: Text('Asroo Store'),
+                ),
+              ),
+            );
+          } else {
+            return MaterialApp(
+              title: 'No NetWork ',
+              debugShowCheckedModeBanner: EnvVariable.instance.debugMode,
+              home: const NoNetWorkScreen(),
+            );
+          }
+        });
+
   }
-// todo connectivity_plus
 }

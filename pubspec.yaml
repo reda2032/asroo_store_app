@@ -16,7 +16,7 @@ dependencies:
 
   # language
   # Core
-
+  connectivity_plus: ^7.0.0
   flutter_dotenv: ^6.0.0
   flutter_screenutil: ^5.9.3
   # UI
