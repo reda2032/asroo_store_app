@@ -2,6 +2,7 @@
 import 'package:asroo_store_app/core/app/connectivity_controller.dart';
 import 'package:asroo_store_app/core/app/env.variables.dart';
 import 'package:asroo_store_app/core/common/screens/no_network_screen.dart';
+import 'package:asroo_store_app/core/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -41,12 +42,8 @@ class AsrooStoreApp extends StatelessWidget {
                     ),
                   );
                 },
-
-                home: const Scaffold(
-                  body: Center(
-                    child: Text('Asroo Store'),
-                  ),
-                ),
+                onGenerateRoute: AppRoutes.onGenerateRoute,
+                initialRoute: AppRoutes.login,
               ),
             );
           } else {
