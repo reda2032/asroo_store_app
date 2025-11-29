@@ -1,4 +1,12 @@
+
+import 'package:asroo_store_app/core/app/connectivity_controller.dart';
+import 'package:asroo_store_app/core/app/env.variables.dart';
+import 'package:asroo_store_app/core/common/screens/no_network_screen.dart';
+import 'package:asroo_store_app/core/language/app_localizations_setup.dart';
+import 'package:asroo_store_app/core/routes/app_routes.dart';
+import 'package:asroo_store_app/core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AsrooStoreApp extends StatelessWidget {
   const AsrooStoreApp({super.key});
@@ -6,13 +14,52 @@ class AsrooStoreApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Asroo Store',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-      ),
-      home:Scaffold(),
-    );
+    return ValueListenableBuilder(
+        valueListenable: ConnectivityController.instance.isConnected,
+
+        builder: (_, value, _) {
+          if (value) {
+            return ScreenUtilInit(
+              designSize: const Size(390, 844),
+              minTextAdapt: true,
+            //splitScreenMode: true,
+              child: MaterialApp(
+                title: 'Asroo Store',
+                debugShowCheckedModeBanner: EnvVariable.instance.debugMode,
+                theme: themeDark(),
+                locale: const Locale('en'),
+                supportedLocales: AppLocalizationsSetup.supportedLocales,
+                localizationsDelegates:
+                AppLocalizationsSetup.localizationsDelegates,
+                localeResolutionCallback:
+                AppLocalizationsSetup.localeResolutionCallback,
+                builder: (context, widget) {
+                  return GestureDetector(
+                    onTap: () {
+                      FocusManager.instance.primaryFocus?.unfocus();
+                    },
+                    child: Scaffold(
+                      body: Builder(
+                        builder: (context) {
+                          ConnectivityController.instance.init();
+                          return widget!;
+                        },
+                      ),
+                    ),
+                  );
+                },
+                onGenerateRoute: AppRoutes.onGenerateRoute,
+                initialRoute: AppRoutes.login,
+              ),
+            );
+          } else {
+            return MaterialApp(
+              title: 'No NetWork ',
+              debugShowCheckedModeBanner: EnvVariable.instance.debugMode,
+              home: const NoNetWorkScreen(),
+            );
+          }
+        });
+
   }
 }
