@@ -1,3 +1,4 @@
+import 'package:asroo_store_app/core/language/app_localizations.dart';
 import 'package:asroo_store_app/core/theme/assets_extension.dart';
 import 'package:asroo_store_app/core/theme/color_extension.dart';
 import 'package:flutter/material.dart';
@@ -10,8 +11,10 @@ extension ContextExt on BuildContext {
   // images
 
   MyAssets get assets => Theme.of(this).extension<MyAssets>()!;
-
-
+  //Language
+  String translate(String langkey) {
+    return AppLocalizations.of(this)!.translate(langkey).toString();
+  }
 
   Future<dynamic> pushName(String routeName, {Object? arguments}) {
     return Navigator.of(this).pushNamed(routeName, arguments: arguments);
